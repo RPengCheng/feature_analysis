@@ -1,5 +1,0 @@
-# 忽略.idea目录
-.idea/
-venv/
-dao/
-learning.py
