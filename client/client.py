@@ -6,21 +6,21 @@ import json
 json_path = r'./client_upload'
 # 上传JSON文件
 def upload_json(jons):
-    for json in jons:
-        url = "http://localhost:8000/upload"
-        file_path = os.path.join(json_path,json)
-        files = {"file":open(file_path,"rb")}
-        response = requests.post(url,files=files)
+    for json_file in jons:
+        url = "https://localhost:8000/upload"  # 使用HTTPS协议
+        file_path = os.path.join(json_path, json_file)
+        with open(file_path, "rb") as file:
+            response = requests.post(url, files={"file": file}, verify=r"..\crt\server.crt")
         print(response.json())
 
 #下载图片资源
 def download_image(path):
-        url = "http://localhost:8000/download/"
-        filenames= requests.get(url).content.decode()
+        url = "https://localhost:8000/download/"
+        filenames= requests.get(url,verify=r"../crt/server.crt").content.decode()
         filenames = json.loads(filenames)
         for file in filenames:
             file_url = url + file
-            response = requests.get(file_url)
+            response = requests.get(file_url,verify=r"../crt/server.crt")
             save_path = os.path.join(path,file)
             if response.status_code == 200:
                 with open(save_path,"wb") as f:
